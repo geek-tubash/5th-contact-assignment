@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Media List</title>
+</head>
+<body>
+  <h2>Uploaded Media</h2>
+
+  <form method="get">
+    <input type="text" name="q" placeholder="Search by title or tag" value="{{ query }}">
+    <button type="submit">Search</button>
+  </form>
+
+  {% for media in page_obj %}
+    <div style="margin-bottom: 30px;">
+      <strong>{{ media.title }}</strong><br>
+
+      {% if media.media_type == 'image' %}
+        <img src="{{ media.file.url }}" width="300">
+      {% elif media.media_type == 'audio' %}
+        <audio controls><source src="{{ media.file.url }}"></audio>
+      {% elif media.media_type == 'video' %}
+        <video controls width="400"><source src="{{ media.file.url }}"></video>
+      {% else %}
+        <a href="{{ media.file.url }}" download>Download {{ media.file.name }}</a>
+      {% endif %}
+
+      <p>Tags: {{ media.tags }}</p>
+      <p>Uploaded: {{ media.uploaded_at }}</p>
+
+      <a href="{% url 'edit_media' media.id %}">Edit</a> |
+      <form action="{% url 'delete_media' media.id %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" onclick="return confirm('Delete this file?');">Delete</button>
+      </form>
+    </div>
+  {% empty %}
+    <p>No media files found.</p>
+  {% endfor %}
+
+  <div>
+    {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">Previous</a>
+    {% endif %}
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">Next</a>
+    {% endif %}
+  </div>
+
+  <p><a href="{% url 'upload_media' %}">Upload another</a></p>
+</body>
+</html>

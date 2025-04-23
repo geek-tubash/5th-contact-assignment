@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>Edit Media</title></head>
+<body>
+  <h2>Edit Media</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Changes</button>
+  </form>
+  <p><a href="{% url 'media_list' %}">Back to list</a></p>
+</body>
+</html>
