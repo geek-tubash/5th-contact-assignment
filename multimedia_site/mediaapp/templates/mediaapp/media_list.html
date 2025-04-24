@@ -1,53 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Media List</title>
+    <title>Media Library</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-  <h2>Uploaded Media</h2>
+<body class="bg-light">
+<div class="container py-5">
+    <h2 class="mb-4">Media Library</h2>
+    <a href="{% url 'upload_media' %}" class="btn btn-success mb-4">Upload New</a>
 
-  <form method="get">
-    <input type="text" name="q" placeholder="Search by title or tag" value="{{ query }}">
-    <button type="submit">Search</button>
-  </form>
-
-  {% for media in page_obj %}
-    <div style="margin-bottom: 30px;">
-      <strong>{{ media.title }}</strong><br>
-
-      {% if media.media_type == 'image' %}
-        <img src="{{ media.file.url }}" width="300">
-      {% elif media.media_type == 'audio' %}
-        <audio controls><source src="{{ media.file.url }}"></audio>
-      {% elif media.media_type == 'video' %}
-        <video controls width="400"><source src="{{ media.file.url }}"></video>
-      {% else %}
-        <a href="{{ media.file.url }}" download>Download {{ media.file.name }}</a>
-      {% endif %}
-
-      <p>Tags: {{ media.tags }}</p>
-      <p>Uploaded: {{ media.uploaded_at }}</p>
-
-      <a href="{% url 'edit_media' media.id %}">Edit</a> |
-      <form action="{% url 'delete_media' media.id %}" method="post" style="display:inline;">
-        {% csrf_token %}
-        <button type="submit" onclick="return confirm('Delete this file?');">Delete</button>
-      </form>
-    </div>
-  {% empty %}
-    <p>No media files found.</p>
-  {% endfor %}
-
-  <div>
-    {% if page_obj.has_previous %}
-      <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">Previous</a>
+    {% if media_files %}
+        <div class="row">
+            {% for media in media_files %}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm">
+                        {% if media.media_type == "image" %}
+                            <img src="{{ media.file.url }}" class="card-img-top" alt="{{ media.title }}">
+                        {% else %}
+                            <div class="card-body">
+                                <p class="text-muted">Non-image file</p>
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ media.title }}</h5>
+                            <p class="card-text"><strong>Tags:</strong> {{ media.tags }}</p>
+                            <a href="{{ media.file.url }}" class="btn btn-sm btn-primary" download>Download</a>
+                            <a href="{% url 'edit_media' media.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{% url 'delete_media' media.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No media uploaded yet.</p>
     {% endif %}
-    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-    {% if page_obj.has_next %}
-      <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">Next</a>
-    {% endif %}
-  </div>
-
-  <p><a href="{% url 'upload_media' %}">Upload another</a></p>
+</div>
 </body>
 </html>
