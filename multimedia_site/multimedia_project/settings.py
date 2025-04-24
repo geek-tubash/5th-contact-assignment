@@ -68,14 +68,13 @@ import os
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),        # Your Render DB name
-        'USER': os.environ.get('DB_USER'),        # Your Render DB user
-        'PASSWORD': os.environ.get('DB_PASSWORD'),# Your Render DB password
-        'HOST': os.environ.get('DB_HOST'),        # Your Render DB host
-        'PORT': os.environ.get('DB_PORT', '5432') # Default port
+        'NAME': os.getenv('DB_NAME', 'multimedia_db'),  # Replace with your actual database name
+        'USER': os.getenv('DB_USER', 'multimedia_user'),  # Replace with your actual username
+        'PASSWORD': os.getenv('DB_PASSWORD', 'siGoqkdRQtff3Z1jwwa3Nh5DkLL4QlXT'),  # Replace with your password
+        'HOST': os.getenv('DB_HOST', 'dpg-d05c28a4d50c73et5iq0-a'),  # Replace with your database host from Render
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
-
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
