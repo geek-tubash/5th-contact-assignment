@@ -63,9 +63,19 @@ TEMPLATES = [
 WSGI_APPLICATION = 'multimedia_project.wsgi.application'
 
 # Database
+import os
+
 DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME'),        # Your Render DB name
+        'USER': os.environ.get('DB_USER'),        # Your Render DB user
+        'PASSWORD': os.environ.get('DB_PASSWORD'),# Your Render DB password
+        'HOST': os.environ.get('DB_HOST'),        # Your Render DB host
+        'PORT': os.environ.get('DB_PORT', '5432') # Default port
+    }
 }
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
