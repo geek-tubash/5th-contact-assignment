@@ -15,4 +15,4 @@ services:
       - key: DJANGO_ALLOWED_HOSTS
         value: multimedia-site-ngk7.onrender.com
       - key: DATABASE_URL
-        value: postgresql://multimedia_user:...@render.com/multimedia_db_630h
+        value: postgresql://multimedia_user:siGoqkdRQtff3Z1jwwa3Nh5DkLL4QlXT@dpg-d05c28a4d50c73et5iq0-a.oregon-postgres.render.com/multimedia_db_630h
